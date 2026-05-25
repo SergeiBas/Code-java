@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title th:text="${title} + ' — Біатлон Java'">Біатлон Java</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+<header>
+  <h1>Біатлон — облік змагань (Java)</h1>
+  <nav>
+    <a href="/">Головна</a>
+    <a href="/countries">Країни</a>
+    <a href="/athletes">Спортсмени</a>
+    <a href="/competitions">Змагання</a>
+    <a href="/disciplines">Дисципліни</a>
+    <a href="/results">Результати</a>
+    <a href="/reports">Звіт</a>
+  </nav>
+</header>
+<main>
+  <div th:insert="~{::content}"></div>
+</main>
+</body>
+</html>

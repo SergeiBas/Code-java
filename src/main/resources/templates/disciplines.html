@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org"><head><meta charset="UTF-8"><title>Дисципліни</title><link rel="stylesheet" href="/style.css"></head>
+<body><header><h1>Дисципліни</h1><nav><a href="/">Головна</a><a href="/countries">Країни</a><a href="/athletes">Спортсмени</a><a href="/competitions">Змагання</a><a href="/disciplines">Дисципліни</a><a href="/results">Результати</a><a href="/reports">Звіт</a></nav></header>
+<main>
+<section class="card"><form class="form-grid cols-2" method="post" action="/disciplines/add"><label>Назва<input name="name_uk" required></label><label>км<input type="number" step="0.1" name="distance_km" required></label><label>Стать<select name="gender"><option value="M">M</option><option value="W">W</option><option value="X">X</option></select></label><label>Лежачи<input type="number" name="rounds_prone" value="0"></label><label>Стоячи<input type="number" name="rounds_standing" value="0"></label><label>Порядок<input name="shooting_order"></label><label>Штраф<select name="penalty_type"><option value="TIME_1MIN">TIME_1MIN</option><option value="TIME_45SEC">TIME_45SEC</option><option value="PENALTY_LOOP">PENALTY_LOOP</option><option value="RELAY_RULES">RELAY_RULES</option></select></label><div><button>Зберегти</button></div></form></section>
+<section class="card">
+  <form class="list-toolbar" method="get" th:action="${resetUrl}">
+    <th:block th:replace="~{fragments/list-toolbar :: sort-basic}"></th:block>
+  </form>
+  <table><thead><tr><th>ID</th><th>Назва</th><th>км</th><th>Штраф</th><th></th></tr></thead><tbody><tr th:each="r : ${rows}"><td th:text="${r['discipline_id']}"></td><td th:text="${r['name_uk']}"></td><td th:text="${r['distance_km']}"></td><td th:text="${r['penalty_type']}"></td><td><form th:action="@{'/disciplines/' + ${r['discipline_id']} + '/delete'}" method="post"><button class="danger small">Видалити</button></form></td></tr></tbody></table></section>
+</main></body></html>

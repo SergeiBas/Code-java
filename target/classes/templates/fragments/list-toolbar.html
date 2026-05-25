@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org">
+<body>
+<!-- Сортування для довідників (країни, змагання, дисципліни) -->
+<th:block th:fragment="sort-basic">
+  <label>Сортування
+    <select name="sort" onchange="this.form.submit()">
+      <option value="id" th:selected="${sort == 'id'}">ID (1 → останній)</option>
+      <option value="id_desc" th:selected="${sort == 'id_desc'}">ID (останній → 1)</option>
+      <option th:if="${showNameSort}" value="name" th:selected="${sort == 'name'}">За назвою</option>
+      <option th:if="${showDateSort}" value="date" th:selected="${sort == 'date'}">За датою (новіші зверху)</option>
+    </select>
+  </label>
+</th:block>
+
+<!-- Фільтри спортсменів (спортсмени, результати) -->
+<th:block th:fragment="athlete-filters">
+  <label>Країна
+    <select name="country_id" onchange="this.form.submit()">
+      <option value="">Усі</option>
+      <option th:each="c : ${countries}" th:value="${c['country_id']}"
+              th:text="${c['country_id']} + ' — ' + ${c['name_uk']}"
+              th:selected="${country_id != null and country_id.toString() == c['country_id'].toString()}"></option>
+    </select>
+  </label>
+  <label>Стать
+    <select name="gender" onchange="this.form.submit()">
+      <option value="">Усі</option>
+      <option value="M" th:selected="${gender == 'M'}">Чоловіки</option>
+      <option value="W" th:selected="${gender == 'W'}">Жінки</option>
+    </select>
+  </label>
+  <label th:if="${showAthletePicker}">Спортсмен
+    <select name="athlete_id" onchange="this.form.submit()">
+      <option value="">Усі</option>
+      <option th:each="a : ${athleteOptions}" th:value="${a['athlete_id']}"
+              th:text="${a['label']}"
+              th:selected="${athlete_id != null and athlete_id.toString() == a['athlete_id'].toString()}"></option>
+    </select>
+  </label>
+  <label>Сортування списку
+    <select name="sort" onchange="this.form.submit()">
+      <option value="points_desc" th:selected="${sort == 'points_desc'}">Бали (більше → менше)</option>
+      <option value="points_asc" th:selected="${sort == 'points_asc'}">Бали (менше → більше)</option>
+      <option value="id" th:selected="${sort == 'id'}">ID (1 → останній)</option>
+      <option value="id_desc" th:selected="${sort == 'id_desc'}">ID (останній → 1)</option>
+      <option value="name" th:selected="${sort == 'name'}">За ПІБ</option>
+      <option value="country" th:selected="${sort == 'country'}">За країною</option>
+    </select>
+  </label>
+</th:block>
+</body>
+</html>

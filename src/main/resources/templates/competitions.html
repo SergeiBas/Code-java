@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org"><head><meta charset="UTF-8"><title>Змагання</title><link rel="stylesheet" href="/style.css"></head>
+<body><header><h1>Змагання</h1><nav><a href="/">Головна</a><a href="/countries">Країни</a><a href="/athletes">Спортсмени</a><a href="/competitions">Змагання</a><a href="/disciplines">Дисципліни</a><a href="/results">Результати</a><a href="/reports">Звіт</a></nav></header>
+<main>
+<section class="card"><form class="form-grid cols-2" method="post" action="/competitions/add"><label>Назва<input name="name" required></label><label>Місце<input name="venue" required></label><label>Початок<input type="date" name="start_date" required></label><label>Кінець<input type="date" name="end_date"></label><label>Сезон<input type="number" name="season_year" value="2025" required></label><div><button>Зберегти</button></div></form></section>
+<section class="card">
+  <form class="list-toolbar" method="get" th:action="${resetUrl}">
+    <th:block th:replace="~{fragments/list-toolbar :: sort-basic}"></th:block>
+  </form>
+  <table><thead><tr><th>ID</th><th>Назва</th><th>Місце</th><th>Період</th><th></th></tr></thead><tbody><tr th:each="r : ${rows}"><td th:text="${r['competition_id']}"></td><td th:text="${r['name']}"></td><td th:text="${r['venue']}"></td><td th:text="${r['start_date']} + ' - ' + ${r['end_date']}"></td><td><form th:action="@{'/competitions/' + ${r['competition_id']} + '/delete'}" method="post"><button class="danger small">Видалити</button></form></td></tr></tbody></table></section>
+</main></body></html>

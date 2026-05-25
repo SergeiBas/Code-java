@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org"><head><meta charset="UTF-8"><title>Спортсмени</title><link rel="stylesheet" href="/style.css"></head>
+<body><header><h1>Спортсмени</h1><nav><a href="/">Головна</a><a href="/countries">Країни</a><a href="/athletes">Спортсмени</a><a href="/competitions">Змагання</a><a href="/disciplines">Дисципліни</a><a href="/results">Результати</a><a href="/reports">Звіт</a></nav></header>
+<main>
+<section class="card"><form class="form-grid cols-2" method="post" action="/athletes/add"><label>Країна<select name="country_id"><option th:each="c : ${countries}" th:value="${c['country_id']}" th:text="${c['country_id']} + ' — ' + ${c['name_uk']}"></option></select></label><label>Стать<select name="gender"><option value="M">Ч</option><option value="W">Ж</option></select></label><label>Прізвище<input name="last_name" required></label><label>Ім'я<input name="first_name" required></label><label>Дата<input type="date" name="birth_date" required></label><div><button>Зберегти</button></div></form></section>
+<section class="card">
+  <form class="list-toolbar form-grid cols-2" method="get" th:action="${resetUrl}">
+    <th:block th:replace="~{fragments/list-toolbar :: athlete-filters}"></th:block>
+    <div class="toolbar-actions"><a class="btn" th:href="${resetUrl}">Скинути</a></div>
+  </form>
+  <table><thead><tr><th>ID</th><th>ПІБ</th><th>Стать</th><th>Країна</th><th>Бали</th><th>Дата</th><th></th></tr></thead><tbody><tr th:each="r : ${rows}"><td th:text="${r['athlete_id']}"></td><td th:text="${r['last_name']} + ' ' + ${r['first_name']}"></td><td th:text="${r['gender'] == 'M' ? 'Ч' : 'Ж'}"></td><td th:text="${r['country_name']}"></td><td th:text="${r['total_points']}"></td><td th:text="${r['birth_date']}"></td><td><form th:action="@{'/athletes/' + ${r['athlete_id']} + '/delete'}" method="post"><button class="danger small">Видалити</button></form></td></tr></tbody></table></section>
+</main></body></html>

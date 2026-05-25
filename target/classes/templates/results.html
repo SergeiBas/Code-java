@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Результати</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header>
+  <h1>Результати</h1>
+  <nav>
+    <a href="/">Головна</a>
+    <a href="/countries">Країни</a>
+    <a href="/athletes">Спортсмени</a>
+    <a href="/competitions">Змагання</a>
+    <a href="/disciplines">Дисципліни</a>
+    <a href="/results">Результати</a>
+    <a href="/reports">Звіт</a>
+  </nav>
+</header>
+<main>
+  <section class="card">
+    <h2>Додати результат</h2>
+    <form class="form-grid cols-2" method="post" action="/results/add">
+      <label>Спортсмен
+        <select name="athlete_id">
+          <option th:each="a : ${athletes}" th:value="${a['athlete_id']}" th:text="${a['label']}"></option>
+        </select>
+      </label>
+      <label>Змагання
+        <select name="competition_id">
+          <option th:each="c : ${competitions}" th:value="${c['competition_id']}" th:text="${c['competition_id']} + ' — ' + ${c['name']}"></option>
+        </select>
+      </label>
+      <label>Дисципліна
+        <select name="discipline_id">
+          <option th:each="d : ${disciplines}" th:value="${d['discipline_id']}" th:text="${d['discipline_id']} + ' — ' + ${d['name_uk']}"></option>
+        </select>
+      </label>
+      <label>Етап естафети (1–4)
+        <input type="number" name="leg_number" min="1" max="4" placeholder="для естафет">
+      </label>
+      <label>Час лиж (сек)<input type="number" name="ski_time_seconds" required></label>
+      <label>Промахи лежачи<input type="number" name="misses_prone" value="0"></label>
+      <label>Промахи стоячи<input type="number" name="misses_standing" value="0"></label>
+      <label>Кола<input type="number" name="penalty_loops" value="0"></label>
+      <label>Штрафний час (естаф.)<input type="number" name="penalty_time_manual" value="0"></label>
+      <div><button>Зберегти</button></div>
+    </form>
+  </section>
+
+  <section class="card">
+    <h2>Залік балів (Кубок світу)</h2>
+    <form class="list-toolbar form-grid cols-2" method="get" action="/results">
+      <th:block th:replace="~{fragments/list-toolbar :: athlete-filters}"></th:block>
+      <div class="toolbar-actions"><a class="btn" href="/results">Скинути</a></div>
+    </form>
+    <table class="standings-table">
+      <thead><tr><th>#</th><th>ID</th><th>Спортсмен</th><th>Країна</th><th>Бали</th></tr></thead>
+      <tbody>
+      <tr th:each="s, stat : ${standings}">
+        <td th:text="${stat.count}"></td>
+        <td th:text="${s['athlete_id']}"></td>
+        <td th:text="${s['last_name']} + ' ' + ${s['first_name']}"></td>
+        <td th:text="${s['country_name']}"></td>
+        <td><strong th:text="${s['total_points']}"></strong></td>
+      </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="card">
+    <h2>Результати змагань</h2>
+    <p class="muted" th:if="${athlete_id != null}">Показано лише обраного спортсмена. <a href="/results">Показати всіх</a></p>
+    <p class="muted" th:if="${#lists.isEmpty(competitionGroups)}">Немає змагань у базі.</p>
+    <div class="accordion" th:unless="${#lists.isEmpty(competitionGroups)}">
+      <details class="accordion-item" th:each="comp : ${competitionGroups}">
+        <summary th:text="${comp.name}"></summary>
+        <div class="accordion-nested">
+          <p class="muted" th:if="${#lists.isEmpty(comp.disciplines)}">Немає результатів для цього змагання.</p>
+          <details class="accordion-item accordion-item--nested" th:each="disc : ${comp.disciplines}">
+            <summary>
+              <span th:if="${disc.relay}" th:text="${disc.name} + ' — командна естафета'"></span>
+              <span th:unless="${disc.relay}" th:text="${disc.name} + ' (' + ${disc.penaltyType} + ')'"></span>
+            </summary>
+
+            <div th:if="${disc.relay}" class="relay-results">
+              <div class="relay-team" th:each="team : ${disc.relayTeams}">
+                <div class="relay-team-header">
+                  <span class="relay-place" th:text="${team.place}"></span>
+                  <strong th:text="${team.countryName}"></strong>
+                  <span class="relay-team-total">
+                    Підсумок команди: <strong th:text="${team.teamFinalSeconds}"></strong> с
+                  </span>
+                </div>
+                <ul class="relay-legs">
+                  <li th:each="leg : ${team.legs}">
+                    <span class="leg-num" th:text="'Етап ' + ${leg['leg_number']}"></span>
+                    <span th:text="${leg['athlete_name']}"></span>
+                    <span class="muted">
+                      <span th:text="${leg['race_points']} + ' б., '"></span>
+                      лижі <span th:text="${leg['ski_time_seconds']}"></span> с,
+                      підсумок <span th:text="${leg['final_time_seconds']}"></span> с
+                      (<span th:text="${leg['misses_prone']} + '/' + ${leg['misses_standing']}"></span> промахи)
+                    </span>
+                    <form class="relay-leg-delete" th:action="@{'/results/' + ${leg['result_id']} + '/delete'}" method="post">
+                      <button class="danger small">Видалити</button>
+                    </form>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <table th:unless="${disc.relay}">
+              <thead>
+              <tr>
+                <th>Місце</th>
+                <th>Спортсмен</th>
+                <th>Бали</th>
+                <th>Лижі</th>
+                <th>Підсумок</th>
+                <th>Промахи</th>
+                <th>Штрафи</th>
+                <th></th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr th:each="r : ${disc.results}">
+                <td th:text="${r['place']}"></td>
+                <td th:text="${r['athlete_name']}"></td>
+                <td th:text="${r['race_points']}"></td>
+                <td th:text="${r['ski_time_seconds']}"></td>
+                <td th:text="${r['final_time_seconds']}"></td>
+                <td th:text="${r['misses_prone']} + '/' + ${r['misses_standing']}"></td>
+                <td th:text="${r['penalty_time_seconds']} + ' c, ' + ${r['penalty_loops']} + ' кіл'"></td>
+                <td>
+                  <form th:action="@{'/results/' + ${r['result_id']} + '/delete'}" method="post">
+                    <button class="danger small">Видалити</button>
+                  </form>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </details>
+        </div>
+      </details>
+    </div>
+  </section>
+</main>
+</body>
+</html>

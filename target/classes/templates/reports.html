@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org"><head><meta charset="UTF-8"><title>Звіт</title><link rel="stylesheet" href="/style.css"></head>
+<body><header><h1>Звіт</h1><nav><a href="/">Головна</a><a href="/countries">Країни</a><a href="/athletes">Спортсмени</a><a href="/competitions">Змагання</a><a href="/disciplines">Дисципліни</a><a href="/results">Результати</a><a href="/reports">Звіт</a></nav></header>
+<main><section class="card"><form class="form-grid cols-2" method="get" action="/reports"><label>Змагання<select name="competition_id"><option value="">-</option><option th:each="c : ${comps}" th:value="${c['competition_id']}" th:text="${c['competition_id']} + ' — ' + ${c['name']}"></option></select></label><label>Дисципліна<select name="discipline_id"><option value="">-</option><option th:each="d : ${discs}" th:value="${d['discipline_id']}" th:text="${d['discipline_id']} + ' — ' + ${d['name_uk']}"></option></select></label><div><button>Показати</button></div></form></section>
+
+<section class="card" th:if="${relay}">
+  <h2>Естафета — командний залік</h2>
+  <div class="relay-results">
+    <div class="relay-team" th:each="team : ${relayTeams}">
+      <div class="relay-team-header">
+        <span class="relay-place" th:text="${team.place}"></span>
+        <strong th:text="${team.countryName}"></strong>
+        <span class="relay-team-total">Підсумок: <strong th:text="${team.teamFinalSeconds}"></strong> с</span>
+      </div>
+      <ul class="relay-legs">
+        <li th:each="leg : ${team.legs}">
+          <span class="leg-num" th:text="'Етап ' + ${leg['leg_number']}"></span>
+          <span th:text="${leg['athlete_name']}"></span>
+          <span class="muted" th:text="${leg['final_time_seconds']} + ' с'"></span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="card" th:if="${rows != null}"><table><thead><tr><th>Місце</th><th>Спортсмен</th><th>Країна</th><th>Підсумок</th></tr></thead><tbody><tr th:each="r : ${rows}"><td th:text="${r['place']}"></td><td th:text="${r['athlete_name']}"></td><td th:text="${r['country_name']}"></td><td th:text="${r['final_time_seconds']}"></td></tr></tbody></table></section>
+</main></body></html>

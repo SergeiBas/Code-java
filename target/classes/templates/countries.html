@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org"><head><meta charset="UTF-8"><title>Країни</title><link rel="stylesheet" href="/style.css"></head>
+<body><header><h1>Країни</h1><nav><a href="/">Головна</a><a href="/countries">Країни</a><a href="/athletes">Спортсмени</a><a href="/competitions">Змагання</a><a href="/disciplines">Дисципліни</a><a href="/results">Результати</a><a href="/reports">Звіт</a></nav></header>
+<main>
+<section class="card"><h2>Додати</h2><form class="form-grid cols-2" method="post" action="/countries/add"><label>ISO<input name="iso_code" required></label><label>Назва<input name="name_uk" required></label><div><button>Зберегти</button></div></form></section>
+<section class="card">
+  <form class="list-toolbar" method="get" th:action="${resetUrl}">
+    <th:block th:replace="~{fragments/list-toolbar :: sort-basic}"></th:block>
+  </form>
+  <table><thead><tr><th>ID</th><th>ISO</th><th>Назва</th><th></th></tr></thead><tbody><tr th:each="r : ${rows}"><td th:text="${r['country_id']}"></td><td th:text="${r['iso_code']}"></td><td th:text="${r['name_uk']}"></td><td><form th:action="@{'/countries/' + ${r['country_id']} + '/delete'}" method="post"><button class="danger small">Видалити</button></form></td></tr></tbody></table></section>
+</main></body></html>

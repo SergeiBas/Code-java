@@ -1,0 +1,4 @@
+com/biathlon/app/BiathlonApplication.class
+com/biathlon/app/DbInitializer.class
+com/biathlon/app/ResultLogic.class
+com/biathlon/app/ResultLogic$Calc.class
