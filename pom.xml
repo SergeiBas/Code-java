@@ -12,8 +12,8 @@
     <groupId>com.biathlon</groupId>
     <artifactId>biathlon-app</artifactId>
     <version>1.0.0</version>
-    <name>biathlon-app</name>
-    <description>Biathlon coursework app (Java)</description>
+    <name>biathlon-results</name>
+    <description>ІС обліку результатів змагань з біатлону</description>
 
     <properties>
         <java.version>17</java.version>

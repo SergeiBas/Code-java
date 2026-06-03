@@ -1,4 +1,57 @@
 <!DOCTYPE html>
-<html lang="uk" xmlns:th="http://www.thymeleaf.org"><head><meta charset="UTF-8"><title>Головна</title><link rel="stylesheet" href="/style.css"></head>
-<body><header><h1>Біатлон — Java</h1><nav><a href="/">Головна</a><a href="/countries">Країни</a><a href="/athletes">Спортсмени</a><a href="/competitions">Змагання</a><a href="/disciplines">Дисципліни</a><a href="/results">Результати</a><a href="/reports">Звіт</a></nav></header>
-<main><section class="card"><h2>Локальний застосунок на Java</h2><p class="lead">Spring Boot + SQLite. База автоматично ініціалізується зі скриптів.</p></section></main></body></html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>Головна</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+<header>
+  <h1>Біатлон — Java</h1>
+  <nav>
+    <a href="/">Головна</a>
+    <a href="/countries">Країни</a>
+    <a href="/athletes">Спортсмени</a>
+    <a href="/competitions">Змагання</a>
+    <a href="/disciplines">Дисципліни</a>
+    <a href="/results">Результати</a>
+    <a href="/reports">Звіт</a>
+  </nav>
+</header>
+<main>
+  <section class="card">
+    <h2>Сайт з обліку результатів змагань з біатлону</h2>
+    <p class="lead">Оберіть дію нижче. Довідники та результати зберігаються в локальній базі даних.</p>
+  </section>
+
+  <section class="card">
+    <h3>Бажаєте внести нові дані?</h3>
+    <p class="muted">Додайте або оновіть довідники та результати гонок.</p>
+    <div class="toolbar-actions" style="flex-wrap: wrap; gap: 0.5rem;">
+      <a class="btn" href="/countries" style="text-decoration: none;">Країни</a>
+      <a class="btn" href="/athletes" style="text-decoration: none;">Спортсмени</a>
+      <a class="btn" href="/competitions" style="text-decoration: none;">Змагання</a>
+      <a class="btn" href="/disciplines" style="text-decoration: none;">Дисципліни</a>
+      <a class="btn" href="/results" style="text-decoration: none;">Результати (додати)</a>
+    </div>
+  </section>
+
+  <section class="card">
+    <h3>Бажаєте переглянути результати останніх змагань?</h3>
+    <p class="muted">Зведені протоколи, місця, бали та фільтри за країною й статтю.</p>
+    <div class="toolbar-actions">
+      <a class="btn" href="/results" style="text-decoration: none;">Перейти до результатів</a>
+    </div>
+  </section>
+
+  <section class="card">
+    <h3>Бажаєте переглянути спортсменів і зведення балів?</h3>
+    <p class="muted">Список учасників із сумою балів за сезон.</p>
+    <div class="toolbar-actions" style="flex-wrap: wrap; gap: 0.5rem;">
+      <a class="btn" href="/athletes" style="text-decoration: none;">Спортсмени</a>
+      <a class="btn" href="/results" style="text-decoration: none;">Зведення балів</a>
+    </div>
+  </section>
+</main>
+</body>
+</html>
